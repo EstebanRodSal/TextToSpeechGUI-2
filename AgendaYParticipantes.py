@@ -23,6 +23,7 @@ class AgendaGUI:
         self.agenda = Datos
         
         self.create_widgets()
+        self.create_widgets_Participantes()
         
     def create_widgets(self):
         """
@@ -36,22 +37,23 @@ class AgendaGUI:
 
 
 
-        #Frame base que contiene todos los inputs
-        self.Base_Frame = tk.Frame(self.root, padx=100, bg= "lightgray")
+        # Frame base que contiene todos los inputs
+        self.Base_Frame = ttk.PanedWindow(self.root, orient=tk.HORIZONTAL)
         self.Base_Frame.pack(side=tk.LEFT, padx=20, pady=20, fill="y")
 
 
 
 
 
+        # Contenedor para los frames de apartados y puntos
+        self.content_frame = tk.Frame(self.Base_Frame, width=400, height=600, bg="#484d67")
+        self.content_frame.pack(side=tk.TOP, padx=20, pady=20)
 
-
-
-
+        
 
         # Frame para la lista de apartados
-        self.apartados_frame = tk.Frame(self.Base_Frame)
-        self.apartados_frame.pack(side=tk.TOP, anchor="nw")
+        self.apartados_frame = tk.Frame(self.content_frame)
+        self.apartados_frame.pack(side=tk.LEFT, pady=20, padx=20, anchor="nw")
 
         self.apartados_label = tk.Label(self.apartados_frame, text="Apartados:")
         self.apartados_label.pack()
@@ -72,13 +74,13 @@ class AgendaGUI:
         self.eliminar_apartado_button.pack(side=tk.LEFT, padx=5)
 
         # Frame para la lista de puntos
-        self.puntos_frame = tk.Frame(self.root)
-        self.puntos_frame.pack(side=tk.LEFT, padx=10)
+        self.puntos_frame = tk.Frame(self.content_frame)
+        self.puntos_frame.pack(side=tk.LEFT, pady=20, padx=20, anchor="ne")
 
         self.puntos_label = tk.Label(self.puntos_frame, text="Puntos:")
         self.puntos_label.pack()
 
-        self.puntos_listbox = tk.Listbox(self.puntos_frame, width=30)
+        self.puntos_listbox = tk.Listbox(self.puntos_frame, width=20)
         self.puntos_listbox.pack(pady=5)
 
         self.puntos_listbox.bind("<<ListboxSelect>>", self.select_punto)
@@ -94,7 +96,15 @@ class AgendaGUI:
         self.eliminar_punto_button.pack(side=tk.LEFT, padx=5)
 
 
+
+
+
         
+
+
+
+
+
 
         
     def nuevo_apartado(self):
@@ -181,22 +191,28 @@ class AgendaGUI:
                 self.puntos_listbox.insert(tk.END, punto)
 
 
-class ParticipantesGUI:
-    def __init__(self, root):
-        self.root = root
+
+
+
+
+    #-------------------------------Participantes---------------------------------------------------
+
+
         
-        self.participantes = Datos
-        
-        self.create_widgets()
-        
-    def create_widgets(self):
+    def create_widgets_Participantes(self):
         """
         Crea los widgets necesarios para la interfaz gráfica.
         """
 
+       
+        # Contenedor para los frames de los participantes
+        self.content_frame_Participantes = tk.Frame(self.Base_Frame, width=400, height=600, bg="#484d67")
+        self.content_frame_Participantes.pack(side=tk.BOTTOM, padx=20, pady=20)
+
+
         # Frame para la lista de participantes
-        self.participantes_frame = tk.Frame(self.root)
-        self.participantes_frame.pack(side=tk.LEFT, padx=20)
+        self.participantes_frame = tk.Frame(self.content_frame_Participantes)
+        self.participantes_frame.pack(side=tk.LEFT, padx=20, pady=20)
 
         self.participantes_label = tk.Label(self.participantes_frame, text="Participantes:")
         self.participantes_label.pack()
@@ -216,12 +232,9 @@ class ParticipantesGUI:
         self.eliminar_participante_button = tk.Button(self.buttons_frame_Parti, text="Eliminar participante", command=self.eliminar_participante)
         self.eliminar_participante_button.pack(side=tk.LEFT, padx=5)
 
-                   
-
-
-        
         
 
+                
         
 
         
@@ -231,7 +244,7 @@ class ParticipantesGUI:
         """
         participante = simpledialog.askstring("Nuevo participante", "Ingrese el nombre del participante:")
         if participante:
-            self.participantes['Participantes'].append(participante)
+            self.agenda['Participantes'].append(participante)
             self.actualizar_participante()
     
     def eliminar_participante(self):
@@ -243,7 +256,7 @@ class ParticipantesGUI:
             participante = self.participantes_listbox.get(indexParti)
             confirmacion = messagebox.askyesno("Eliminar participante", f"¿Está seguro que desea eliminar el participante '{participante}'?")
             if confirmacion:
-                del self.participantes[participante]
+                del self.agenda[participante]
                 
     
     
@@ -264,7 +277,7 @@ class ParticipantesGUI:
         """
         self.participantes_listbox.delete(0, tk.END)
         participantes_index = self.participantes_listbox.curselection()
-        for participante in self.participantes['Participantes']:
+        for participante in self.agenda['Participantes']:
                 self.participantes_listbox.insert(tk.END, participante)
                 
 
@@ -281,7 +294,6 @@ if __name__ == "__main__":
 
 
     appAgenda = AgendaGUI(root)
-    appParticimantes = ParticipantesGUI(root)
     root.mainloop()
 
     

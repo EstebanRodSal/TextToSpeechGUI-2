@@ -1,6 +1,6 @@
 import tkinter as tk
 from tkinter import messagebox, simpledialog, ttk
-from AgendaYParticipantes import AgendaGUI,ParticipantesGUI
+from AgendaYParticipantes import AgendaGUI
 from Datos import Datos
 
 
@@ -17,7 +17,7 @@ class main:
 
 
         agenda = AgendaGUI(root)
-        participantes = ParticipantesGUI(root)
+        
         
 
 
