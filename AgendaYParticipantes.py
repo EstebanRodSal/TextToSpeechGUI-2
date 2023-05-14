@@ -1,8 +1,22 @@
 import tkinter as tk
-from tkinter import messagebox, simpledialog
+from tkinter import messagebox, simpledialog, ttk
 from Datos import Datos
 
+
+
+
+
+
+
+
+
+
+
+
 class AgendaGUI:
+
+  
+
     def __init__(self, root):
         self.root = root
         
@@ -20,9 +34,24 @@ class AgendaGUI:
 
         # Agenda
 
+
+
+        #Frame base que contiene todos los inputs
+        self.Base_Frame = tk.Frame(self.root, padx=100, bg= "lightgray")
+        self.Base_Frame.pack(side=tk.LEFT, padx=20, pady=20, fill="y")
+
+
+
+
+
+
+
+
+
+
         # Frame para la lista de apartados
-        self.apartados_frame = tk.Frame(self.root)
-        self.apartados_frame.pack(side=tk.LEFT, padx=10, pady=5)
+        self.apartados_frame = tk.Frame(self.Base_Frame)
+        self.apartados_frame.pack(side=tk.TOP, anchor="nw")
 
         self.apartados_label = tk.Label(self.apartados_frame, text="Apartados:")
         self.apartados_label.pack()
@@ -240,11 +269,22 @@ class ParticipantesGUI:
                 
 
 
+
+
+
+
+
 #Si se ejecuta este archivó inicializa correctamente el codigo
 if __name__ == "__main__":
     root = tk.Tk()
+
+
+
     appAgenda = AgendaGUI(root)
     appParticimantes = ParticipantesGUI(root)
     root.mainloop()
+
+    
+
     
 

@@ -1,5 +1,5 @@
 import tkinter as tk
-from tkinter import messagebox, simpledialog
+from tkinter import messagebox, simpledialog, ttk
 from AgendaYParticipantes import AgendaGUI,ParticipantesGUI
 from Datos import Datos
 
@@ -13,7 +13,7 @@ class main:
         self.root = root
         self.root.title("TextToSpeech") #Nombre del programa
         
-        root.config(bg="skyblue")
+        root.config(bg="#1f1f1f")
 
 
         agenda = AgendaGUI(root)
