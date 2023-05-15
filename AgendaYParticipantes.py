@@ -5,14 +5,6 @@ from Datos import Datos
 
 
 
-
-
-
-
-
-
-
-
 class AgendaGUI:
 
   
@@ -174,7 +166,7 @@ class AgendaGUI:
         excluyendo la primera llave.
         """
         self.apartados_listbox.delete(0, tk.END)
-        llaves = list(self.agenda.keys())[1:]
+        llaves = list(self.agenda.keys())[2:]
         for apartado in llaves:
             self.apartados_listbox.insert(tk.END, apartado)
 
@@ -290,9 +282,6 @@ class AgendaGUI:
 #Si se ejecuta este archivó inicializa correctamente el codigo
 if __name__ == "__main__":
     root = tk.Tk()
-
-
-
     appAgenda = AgendaGUI(root)
     root.mainloop()
 
