@@ -53,11 +53,11 @@ class VoiceRec:
 
     def dialogo_grabacion_reconocer(self):
         # Creamos el diálogo de selección de archivo
-        filename = filedialog.askopenfilename()
+        self.filename = filedialog.askopenfilename()
         # Si el usuario selecciona un archivo, mostramos la ruta en un label
-        if filename:
+        if self.filename:
             self.ruta_grabacion_a_reconocer.delete("1.0", "end")
-            self.ruta_grabacion_a_reconocer.insert("1.0", filename)
+            self.ruta_grabacion_a_reconocer.insert("1.0", self.filename)
 
      
     def reconocer_texto(self):
@@ -72,70 +72,96 @@ class VoiceRec:
         self.textoRec = text
 
     def asignar_agenda(self):
-        root = tk.Tk()
-        root.geometry('500x250')
-        root.resizable(False, False)
-        root.title('Asignar punto de la agenda')
+            ruta_archi = self.filename
 
-        label1 = ttk.Label(root, text="Seleccione el participante:")
-        label1.pack(fill=tk.X, padx=5, pady=5)
+            if ruta_archi in [ruta[4] for ruta in self.data['Registro']]:
+                    
+                    # Mostrar ventana de error
+                    root = tk.Tk()
+                    root.geometry('250x150')
+                    root.resizable(False, False)
+                    root.title('Error')
 
-        selected_participant = tk.StringVar()
-        option_cb1 = ttk.Combobox(root, textvariable=selected_participant)
-        option_cb1['values'] = self.data['Participantes']
-        option_cb1['state'] = 'readonly'
-        option_cb1.pack(fill=tk.X, padx=5, pady=5)
+                    label = tk.Label(root, text="El archivo ya se reconoció", padx=20, pady=20)
+                    label.pack()
 
-        label2 = ttk.Label(root, text="Seleccione el apartado de la agenda:")
-        label2.pack(fill=tk.X, padx=5, pady=5)
+                    def cerrar_ventana():
+                        root.destroy()
 
-        selected_topic = tk.StringVar()
-        option_cb2 = ttk.Combobox(root, textvariable=selected_topic)
-        option_cb2["values"] = list(self.data.keys())[2:]
-        option_cb2['state'] = 'readonly'
-        option_cb2.pack(fill=tk.X, padx=5, pady=5)
+                    boton_aceptar = tk.Button(root, text="Aceptar", command=cerrar_ventana)
+                    boton_aceptar.pack(pady=10)
 
-        label3 = ttk.Label(root, text="Seleccione el punto de la agenda:")
-        label3.pack(fill=tk.X, padx=5, pady=5)
-
-        selected_point = tk.StringVar()
-        option_cb3 = ttk.Combobox(root, textvariable=selected_point)
-        option_cb3['state'] = 'readonly'
-        option_cb3.pack(fill=tk.X, padx=5, pady=5)
-
-        # Variables que almacenarán los valores seleccionados
-        participante_seleccionado = ""
-        apartado_seleccionado = ""
-        punto_seleccionado = ""
-
-        def update_point_options(event):
-            nonlocal apartado_seleccionado  # Declaramos la variable apartado_seleccionado como no local
-            selected_topic = option_cb2.get()
-            apartado_seleccionado = selected_topic  # Actualizamos el valor de la variable apartado_seleccionado
-            if selected_topic in self.data:
-                option_cb3['values'] = self.data[selected_topic]
+                    root.mainloop()
+                    return
             else:
-                option_cb3['values'] = []
+                
+                root = tk.Tk()
+                root.geometry('500x250')
+                root.resizable(False, False)
+                root.title('Asignar punto de la agenda')
 
-        def guardar_seleccion():
-            nonlocal participante_seleccionado, apartado_seleccionado, punto_seleccionado
-            participante_seleccionado = option_cb1.get()
-            punto_seleccionado = option_cb3.get()
+                label1 = ttk.Label(root, text="Seleccione el participante:")
+                label1.pack(fill=tk.X, padx=5, pady=5)
+
+                selected_participant = tk.StringVar()
+                option_cb1 = ttk.Combobox(root, textvariable=selected_participant)
+                option_cb1['values'] = self.data['Participantes']
+                option_cb1['state'] = 'readonly'
+                option_cb1.pack(fill=tk.X, padx=5, pady=5)
+
+                label2 = ttk.Label(root, text="Seleccione el apartado de la agenda:")
+                label2.pack(fill=tk.X, padx=5, pady=5)
+
+                selected_topic = tk.StringVar()
+                option_cb2 = ttk.Combobox(root, textvariable=selected_topic)
+                option_cb2["values"] = list(self.data.keys())[2:]
+                option_cb2['state'] = 'readonly'
+                option_cb2.pack(fill=tk.X, padx=5, pady=5)
+
+                label3 = ttk.Label(root, text="Seleccione el punto de la agenda:")
+                label3.pack(fill=tk.X, padx=5, pady=5)
+
+                selected_point = tk.StringVar()
+                option_cb3 = ttk.Combobox(root, textvariable=selected_point)
+                option_cb3['state'] = 'readonly'
+                option_cb3.pack(fill=tk.X, padx=5, pady=5)
+
+                # Variables que almacenarán los valores seleccionados
+                participante_seleccionado = ""
+                apartado_seleccionado = ""
+                punto_seleccionado = ""
+
+                def update_point_options(event):
+                    nonlocal apartado_seleccionado  # Declaramos la variable apartado_seleccionado como no local
+                    selected_topic = option_cb2.get()
+                    apartado_seleccionado = selected_topic  # Actualizamos el valor de la variable apartado_seleccionado
+                    if selected_topic in self.data:
+                        option_cb3['values'] = self.data[selected_topic]
+                    else:
+                        option_cb3['values'] = []
+
+                def guardar_seleccion():
+                    nonlocal participante_seleccionado, apartado_seleccionado, punto_seleccionado
+                    participante_seleccionado = option_cb1.get()
+                    punto_seleccionado = option_cb3.get()
 
 
-            registro = [participante_seleccionado, apartado_seleccionado, punto_seleccionado, self.textoRec]
-            Datos['Registro'].append(registro)
-            root.destroy() # Cierra la ventana
+                    registro = [participante_seleccionado, apartado_seleccionado, punto_seleccionado, self.textoRec, self.filename]
+                    Datos['Registro'].append(registro)
+                    root.destroy() # Cierra la ventana
 
-        option_cb2.bind('<<ComboboxSelected>>', update_point_options)
+                option_cb2.bind('<<ComboboxSelected>>', update_point_options)
 
-        # Botón para guardar la selección
-        btn_guardar = ttk.Button(root, text="Guardar selección", command=guardar_seleccion)
-        btn_guardar.pack(pady=10)
+                # Botón para guardar la selección
+                btn_guardar = ttk.Button(root, text="Guardar selección", command=guardar_seleccion)
+                btn_guardar.pack(pady=10)
 
 
-        root.mainloop()
+                root.mainloop()
 
+
+
+        
 
 
 
@@ -204,7 +230,7 @@ class VoiceRec:
 
 
          # Agregamos un botón para iniciar las asignaciones a la agenda en base al texto
-        button = tk.Button(self.content_frame_Participantes, text="Asigar", command=self.asignar_agenda)
+        button = tk.Button(self.content_frame_Participantes, text="Asiganr", command=self.asignar_agenda)
         button.place(x=100, y=550, width=200, height=30)
 
 

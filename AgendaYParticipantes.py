@@ -25,6 +25,7 @@ class AgendaGUI:
         self.create_widgets()
         self.create_widgets_Participantes()
         
+        
     def create_widgets(self):
         """
         Crea los widgets necesarios para la interfaz gráfica.
@@ -227,6 +228,7 @@ class AgendaGUI:
         Método que se ejecuta cuando se selecciona un apartado en la lista de apartados. 
         Actualiza los puntos relacionados con el apartado seleccionado.
         """
+        apartado_selec = self.apartados_listbox.curselection()
         self.actualizar_puntos()
     
     def select_punto(self, event):
@@ -234,6 +236,7 @@ class AgendaGUI:
         Método que se ejecuta cuando se selecciona un punto en la lista de puntos.
         """
         pass
+        #Se debería guardar primero el valor de el apartados sleccionado
     
     def actualizar_apartados(self):
         """
@@ -244,6 +247,8 @@ class AgendaGUI:
         llaves = list(self.agenda.keys())[2:]
         for apartado in llaves:
             self.apartados_listbox.insert(tk.END, apartado)
+        
+        
 
     
     def actualizar_puntos(self):
