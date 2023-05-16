@@ -1,6 +1,14 @@
 import tkinter as tk
-from tkinter import messagebox, simpledialog, ttk
+from tkinter import messagebox, simpledialog, ttk, filedialog
 from Datos import Datos
+
+
+
+
+
+
+
+
 
 
 
@@ -90,12 +98,58 @@ class AgendaGUI:
 
 
 
+        # Botones para guardar proyecto
+        self.buttons_frame_Parti = tk.Frame(self.root)
+        self.buttons_frame_Parti.pack(side=tk.RIGHT ,pady=5, anchor="ne")
+
+        self.nuevo_participante_button = tk.Button(self.buttons_frame_Parti, text="Guardar proyecto",command=self.guardar_proyecto)
+        self.nuevo_participante_button.pack(side=tk.LEFT, padx=5, anchor="ne")
+
+
+
+        # Botones para abir proyecti
+
+
+        self.nuevo_participante_button = tk.Button(self.buttons_frame_Parti, text="Abrir proyecto", command=self.Abrir_Proyecto)
+        self.nuevo_participante_button.pack(side=tk.LEFT, padx=5, anchor="ne")
+
+
+
+
 
         
 
 
+    def guardar_proyecto(self):
+        file_name = filedialog.asksaveasfilename(defaultextension=".txt")
+        if file_name:
+            with open(file_name, mode='w') as archivo:
+                archivo.write(str(self.agenda))
+        print('Archivo guardado correctamente')
 
+    
+    def Abrir_Proyecto(self):
+        file_name = filedialog.askopenfilename(defaultextension=".txt")
+        if file_name:
+            with open(file_name, mode='r') as archivo:
+                contenido = archivo.read()
+            
+            
+           # Convertir el contenido del archivo en un diccionario de Python
+            datos_temporales = eval(contenido)
+            
 
+            Datos.clear()
+            # Actualizar el diccionario de datos contenido en el archivo "Datos"
+            Datos.update(datos_temporales)
+            print('Archivo cargado correctamente')
+
+            
+
+            # Llamar a las funciones actualizadora en AgendaGUI para actualizar los datos de la agenda
+            self.actualizar_apartados()
+            self.actualizar_puntos()
+            self.actualizar_participante()
 
 
         
@@ -163,7 +217,7 @@ class AgendaGUI:
     def actualizar_apartados(self):
         """
         Método que actualiza la lista de apartados con los nombres de los apartados de la agenda,
-        excluyendo la primera llave.
+        excluyendo las primeras 2 llave.
         """
         self.apartados_listbox.delete(0, tk.END)
         llaves = list(self.agenda.keys())[2:]
@@ -224,6 +278,9 @@ class AgendaGUI:
         self.eliminar_participante_button = tk.Button(self.buttons_frame_Parti, text="Eliminar participante", command=self.eliminar_participante)
         self.eliminar_participante_button.pack(side=tk.LEFT, padx=5)
 
+
+        
+
         
 
                 
@@ -263,6 +320,7 @@ class AgendaGUI:
     
     
     
+    
     def actualizar_participante(self):
         """
         Método que actualiza la lista de participantes.
@@ -272,6 +330,7 @@ class AgendaGUI:
         for participante in self.agenda['Participantes']:
                 self.participantes_listbox.insert(tk.END, participante)
                 
+
 
 
 

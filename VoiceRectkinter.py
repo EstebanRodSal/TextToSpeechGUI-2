@@ -3,13 +3,15 @@ from tkinter import filedialog, messagebox, ttk
 from pydub import AudioSegment
 from pydub.silence import split_on_silence
 import speech_recognition as sr
+from Datos import Datos
+from tkinter.messagebox import showinfo
 
 
 
 class VoiceRec:
     def __init__(self, root):
         self.root = root
-        
+        self.data = Datos
         self.create_widgets()
 
 
@@ -67,6 +69,56 @@ class VoiceRec:
         print(text)
 
 
+    def asignar_agenda(self):
+        root = tk.Tk()
+        root.geometry('500x200')
+        root.resizable(False, False)
+        root.title('Asignar punto de la agenda')
+
+        label1 = ttk.Label(root, text="Seleccione el participante:")
+        label1.pack(fill=tk.X, padx=5, pady=5)
+
+        selected_participant = tk.StringVar()
+        option_cb1 = ttk.Combobox(root, textvariable=selected_participant)
+        option_cb1['values'] = self.data['Participantes']
+        option_cb1['state'] = 'readonly'
+        option_cb1.pack(fill=tk.X, padx=5, pady=5)
+
+        label2 = ttk.Label(root, text="Seleccione el apartado de la agenda:")
+        label2.pack(fill=tk.X, padx=5, pady=5)
+
+        selected_topic = tk.StringVar()
+        option_cb2 = ttk.Combobox(root, textvariable=selected_topic)
+        option_cb2["values"] = list(self.data.keys())[2:]
+        option_cb2['state'] = 'readonly'
+        option_cb2.pack(fill=tk.X, padx=5, pady=5)
+
+        label3 = ttk.Label(root, text="Seleccione el punto de la agenda:")
+        label3.pack(fill=tk.X, padx=5, pady=5)
+
+        selected_point = tk.StringVar()
+        option_cb3 = ttk.Combobox(root, textvariable=selected_point)
+        option_cb3['state'] = 'readonly'
+        option_cb3.pack(fill=tk.X, padx=5, pady=5)
+
+
+
+        def update_point_options(event):
+            selected_topic = option_cb2.get()
+            if selected_topic in self.data:
+                option_cb3['values'] = self.data[selected_topic]
+            else:
+                option_cb3['values'] = []
+
+
+        option_cb2.bind('<<ComboboxSelected>>', update_point_options)
+
+        root.mainloop()
+
+
+
+
+
 
         
 
@@ -91,6 +143,7 @@ class VoiceRec:
 
         # Agregamos una caja de texto para determinar la ruta del archivo de la grabación a subdividir
         self.ruta_grabacion_a_dividir = tk.Text(self.content_frame_Participantes, height=3, width=48)
+        self.ruta_grabacion_a_dividir.insert("1.0", "aún no hay archivo...")
         self.ruta_grabacion_a_dividir.place(x=8, y=40)
 
         # Agregamos un botón para abrir el selector de la carpeta
@@ -98,7 +151,8 @@ class VoiceRec:
         button.place(x=0, y=120, width=500, height=30)
 
         # Agregamos una caja de texto para determinar la ruta del archivo de la grabación a subdividir
-        self.ruta_carpeta = tk.Text(self.content_frame_Participantes, height=3, width=48)
+        self.ruta_carpeta = tk.Text( self.content_frame_Participantes, height=3, width=48)
+        self.ruta_carpeta.insert("1.0", "aún no hay una carpeta seleccionada...")
         self.ruta_carpeta.place(x=8, y=160)
 
         # Agregamos un botón para abrir el selector del archivo ya cortado a ser reconocido por SpeechRecognition
@@ -107,6 +161,7 @@ class VoiceRec:
 
         # Agregamos una caja de texto para determinar la ruta del archivo de la grabación a subdividir
         self.ruta_grabacion_a_reconocer = tk.Text(self.content_frame_Participantes, height=3, width=48)
+        self.ruta_grabacion_a_reconocer.insert("1.0", "aún no una carpeta seleccionada...")
         self.ruta_grabacion_a_reconocer.place(x=8, y=270)
 
         # Agregamos un botón para iniciar la división del audio
@@ -118,7 +173,7 @@ class VoiceRec:
         button.place(x=0, y=340, width=500, height=30)
 
         # Agregamos una caja de texto para mostrar el resultado del reconocimiento de texto
-        self.resultado = tk.Text(self.content_frame_Participantes, height=6, width=48)
+        self.resultado = tk.Text(self.content_frame_Participantes, height=6, width=48, bg="lightgreen")
         self.resultado.place(x=8, y=380)
 
 
@@ -127,8 +182,11 @@ class VoiceRec:
 
 
          # Agregamos un botón para iniciar las asignaciones a la agenda en base al texto
-        button = tk.Button(self.content_frame_Participantes, text="Asigar", command=self.reconocer_texto)
+        button = tk.Button(self.content_frame_Participantes, text="Asigar", command=self.asignar_agenda)
         button.place(x=100, y=550, width=200, height=30)
+
+
+
 
 
 
