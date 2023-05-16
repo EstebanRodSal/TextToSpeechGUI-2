@@ -113,11 +113,32 @@ class AgendaGUI:
         self.nuevo_participante_button = tk.Button(self.buttons_frame_Parti, text="Abrir proyecto", command=self.Abrir_Proyecto)
         self.nuevo_participante_button.pack(side=tk.LEFT, padx=5, anchor="ne")
 
+        # Botones para generar reporte 
+        self.buttons_frame_repo = tk.Frame(self.root)
+        self.buttons_frame_repo.pack(side=tk.RIGHT ,pady=5, anchor="se")
+
+        self.nuevo_participante_button = tk.Button(self.buttons_frame_repo, text="Generar reporte", command=self.generar_reporte)
+        self.nuevo_participante_button.pack(side=tk.LEFT, padx=5, anchor="ne")
 
 
 
 
-        
+
+    def generar_reporte(self):
+       file_name_reporte = filedialog.asksaveasfilename(defaultextension=".txt")
+       if file_name_reporte:
+
+        with open(file_name_reporte, mode='w') as archivo:
+            for lista in self.agenda['Registro']:
+                participante = lista[0]
+                apartado = lista[1]
+                punto = lista[2]
+                aporte = lista[3]
+
+                archivo.write(f'Participante: {participante}\n')
+                archivo.write(f'Apartado: {apartado}\n')
+                archivo.write(f'Punto: {punto}\n')
+                archivo.write(f'Aporte:\n{aporte}\n\n')
 
 
     def guardar_proyecto(self):
