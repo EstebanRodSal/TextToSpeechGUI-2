@@ -165,16 +165,16 @@ class VoiceRec:
 
         # Agregamos una caja de texto para determinar la ruta del archivo de la grabación a subdividir
         self.ruta_grabacion_a_dividir = tk.Text(self.content_frame_Participantes, height=3, width=48)
-        self.ruta_grabacion_a_dividir.insert("1.0", "aún no hay archivo...")
+        self.ruta_grabacion_a_dividir.insert("1.0", "Inserte el archivo con la sesion completa para ser segmentada...")
         self.ruta_grabacion_a_dividir.place(x=8, y=40)
 
         # Agregamos un botón para abrir el selector de la carpeta
-        button = tk.Button(self.content_frame_Participantes, text="Abrir carpeta contenedora de segmentos de grabación", command=self.dialogo_carpeta)
+        button = tk.Button(self.content_frame_Participantes, text="Abrir carpeta con segmentos", command=self.dialogo_carpeta)
         button.place(x=0, y=120, width=500, height=30)
 
         # Agregamos una caja de texto para determinar la ruta del archivo de la grabación a subdividir
         self.ruta_carpeta = tk.Text( self.content_frame_Participantes, height=3, width=48)
-        self.ruta_carpeta.insert("1.0", "aún no hay una carpeta seleccionada...")
+        self.ruta_carpeta.insert("1.0", "Inserte la carpeta con los segmentos...")
         self.ruta_carpeta.place(x=8, y=160)
 
         # Agregamos un botón para abrir el selector del archivo ya cortado a ser reconocido por SpeechRecognition
@@ -183,7 +183,7 @@ class VoiceRec:
 
         # Agregamos una caja de texto para determinar la ruta del archivo de la grabación a subdividir
         self.ruta_grabacion_a_reconocer = tk.Text(self.content_frame_Participantes, height=3, width=48)
-        self.ruta_grabacion_a_reconocer.insert("1.0", "aún no una carpeta seleccionada...")
+        self.ruta_grabacion_a_reconocer.insert("1.0", "Ingrese el archivo a reconocer...")
         self.ruta_grabacion_a_reconocer.place(x=8, y=270)
 
         # Agregamos un botón para iniciar la división del audio
