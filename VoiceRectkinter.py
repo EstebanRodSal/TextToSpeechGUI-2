@@ -12,6 +12,7 @@ class VoiceRec:
     def __init__(self, root):
         self.root = root
         self.data = Datos
+        self.textoRec = "" 
         self.create_widgets()
 
 
@@ -58,6 +59,7 @@ class VoiceRec:
             self.ruta_grabacion_a_reconocer.delete("1.0", "end")
             self.ruta_grabacion_a_reconocer.insert("1.0", filename)
 
+     
     def reconocer_texto(self):
         archivo_a_reconocer = self.ruta_grabacion_a_reconocer.get("1.0", "end-1c")
         r = sr.Recognizer()
@@ -67,11 +69,11 @@ class VoiceRec:
         self.resultado.delete("1.0", "end")
         self.resultado.insert("1.0", text)
         print(text)
-
+        self.textoRec = text
 
     def asignar_agenda(self):
         root = tk.Tk()
-        root.geometry('500x200')
+        root.geometry('500x250')
         root.resizable(False, False)
         root.title('Asignar punto de la agenda')
 
@@ -101,19 +103,39 @@ class VoiceRec:
         option_cb3['state'] = 'readonly'
         option_cb3.pack(fill=tk.X, padx=5, pady=5)
 
-
+        # Variables que almacenarán los valores seleccionados
+        participante_seleccionado = ""
+        apartado_seleccionado = ""
+        punto_seleccionado = ""
 
         def update_point_options(event):
+            nonlocal apartado_seleccionado  # Declaramos la variable apartado_seleccionado como no local
             selected_topic = option_cb2.get()
+            apartado_seleccionado = selected_topic  # Actualizamos el valor de la variable apartado_seleccionado
             if selected_topic in self.data:
                 option_cb3['values'] = self.data[selected_topic]
             else:
                 option_cb3['values'] = []
 
+        def guardar_seleccion():
+            nonlocal participante_seleccionado, apartado_seleccionado, punto_seleccionado
+            participante_seleccionado = option_cb1.get()
+            punto_seleccionado = option_cb3.get()
+
+
+            registro = [participante_seleccionado, apartado_seleccionado, punto_seleccionado, self.textoRec]
+            Datos['Registro'].append(registro)
+            root.destroy() # Cierra la ventana
 
         option_cb2.bind('<<ComboboxSelected>>', update_point_options)
 
+        # Botón para guardar la selección
+        btn_guardar = ttk.Button(root, text="Guardar selección", command=guardar_seleccion)
+        btn_guardar.pack(pady=10)
+
+
         root.mainloop()
+
 
 
 
